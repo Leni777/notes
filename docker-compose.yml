@@ -1,0 +1,54 @@
+# Lokální vývoj:  tools/dev.sh up  →  appka http://localhost:8794 (lenka / test, roman / test)
+#                                     testy  http://localhost:8795 (samostatná databáze a složka s obrázky)
+# Porty se nepotkají s hubnutím (8790, 8791, 3307) ani s todo (8792, 8793, 3308).
+name: notes
+services:
+  db:
+    image: mysql:8.0
+    container_name: notes_db
+    environment:
+      MYSQL_DATABASE: notes
+      MYSQL_USER: notes
+      MYSQL_PASSWORD: notes
+      MYSQL_ROOT_PASSWORD: notes-root
+    ports:
+      - "3309:3306"
+    volumes:
+      - notes_db:/var/lib/mysql
+      - ./db/init-dev.sql:/docker-entrypoint-initdb.d/01-init-dev.sql:ro
+
+  web:
+    image: notes-php
+    build: ./docker
+    container_name: notes_web
+    ports:
+      - "8794:80"
+    volumes:
+      - ./web:/var/www/html
+    depends_on:
+      - db
+
+  web-test:
+    image: notes-php
+    container_name: notes_web_test
+    environment:
+      NOTES_DB_NAME: notes_test
+      NOTES_DATA_DIR: /tmp/notes-test-data   # obrázky testů mimo lokální data
+    ports:
+      - "8795:80"
+    volumes:
+      - ./web:/var/www/html
+    depends_on:
+      - db
+
+  # Plánovač upozornění: každou minutu zavolá API, které rozešle upozornění na změny dokumentů.
+  # Na hostingu totéž dělá cron-job.org (viz README).
+  cron:
+    image: notes-php
+    container_name: notes_cron
+    command: ["sh", "-c", "while true; do curl -s -o /dev/null 'http://web/server/index.php?r=/api/cron&token=dev-cron'; sleep 60; done"]
+    depends_on:
+      - web
+
+volumes:
+  notes_db:

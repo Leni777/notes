@@ -1,0 +1,11 @@
+# tajné a lokální
+web/server/env.json
+tools/deploy.json
+tools/out/
+# obrázky z dokumentů (lokální data, na hostingu ve složce data/)
+web/data/
+# python, node
+__pycache__/
+.venv/
+node_modules/
+tools/browser/shots/

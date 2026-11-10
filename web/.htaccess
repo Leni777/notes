@@ -1,0 +1,19 @@
+# Appka Poznámky – složka /www/subdom/app/notes/ → https://app.makuderovi.cz/notes/
+# Podle pravidel app.makuderovi.cz (makuderovi/app.md): žádné vlastní "RewriteEngine On"
+# (přebilo by /www/subdom/app/.htaccess, který řeší HTTPS, zákazy a lomítko). Ostatní direktivy smí.
+# API běží přes skutečný soubor server/index.php?r=/api/…
+Options -Indexes
+DirectoryIndex index.html
+
+<IfModule mod_mime.c>
+  AddType application/manifest+json .webmanifest
+</IfModule>
+
+<IfModule mod_headers.c>
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "same-origin"
+  # nová verze appky se projeví hned po nahrání (WEDOS jinak statické soubory cachuje 30 dní)
+  <FilesMatch "\.(html|js|css|webmanifest)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+</IfModule>

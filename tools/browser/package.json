@@ -1,0 +1,9 @@
+{
+  "name": "notes-browser-tests",
+  "private": true,
+  "description": "Prohlížečové testy appky Poznámky (Playwright, Chromium). Spouští tools/dev.sh test.",
+  "type": "module",
+  "dependencies": {
+    "playwright": "1.64.1"
+  }
+}

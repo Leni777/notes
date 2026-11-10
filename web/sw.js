@@ -1,9 +1,9 @@
 // Service worker: appka se načte i bez signálu (poslední uložená verze) a zobrazuje upozornění.
 // Data z API (server/index.php) se necachují – kromě obrázků v dokumentech (pod stejným id se nikdy nemění).
 // Cesty jsou relativní ke složce appky.
-const CACHE = 'notes-v1';
+const CACHE = 'notes-v2';
 const SHELL = ['./', 'index.html', 'style.css', 'app.js', 'lib.js', 'md.js', 'merge.js', 'rich.js', 'plain.js', 'doc.js', 'tree.js', 'history.js',
-  'push.js', 'manifest.webmanifest', 'icon.svg', 'icon-192.png'];
+  'push.js', 'poznamky.webmanifest', 'icon.svg', 'icon-192.png'];
 
 self.addEventListener('install', (e) => {
   e.waitUntil(caches.open(CACHE).then((c) => c.addAll(SHELL)).then(() => self.skipWaiting()));

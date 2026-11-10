@@ -5,7 +5,7 @@ import { chromium } from 'playwright';
 const base = process.argv[2] || 'http://localhost:8795';
 const browser = await chromium.launch();
 const page = await browser.newPage();
-await page.goto(base + '/manifest.webmanifest').catch(() => page.goto(base + '/'));
+await page.goto(base + '/poznamky.webmanifest').catch(() => page.goto(base + '/'));
 
 const results = await page.evaluate(async () => {
   const { mdToHtml, htmlToMd } = await import('/md.js');
